@@ -1,1 +1,5 @@
 *.dll*
+*.pidb
+LatteDB.Tests/test-results/
+LatteDB.userprefs
+test-results/
