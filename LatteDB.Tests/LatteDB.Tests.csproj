@@ -39,7 +39,8 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Features\Simple_object_feature.cs" />
-    <Compile Include="Specs\LatteDB_when_using_same_session.cs" />
+    <Compile Include="Specs\LatteDB_when_storing_to_a_file.cs" />
+    <Compile Include="Specs\LatteDB_when_reading_from_a_file.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
