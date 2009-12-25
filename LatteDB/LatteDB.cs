@@ -5,52 +5,56 @@ using Newtonsoft.Json;
 
 namespace LatteDB
 {
-	public class LatteDB : IDisposable
+	public class LatteDB
 	{
-		protected Stream store;
-		
-		protected LatteDB()
+		protected IStreamHandler _streamHandler;
+
+		public LatteDB ()
 		{
+			var filename = "database.db";
+			_streamHandler = new FileStreamHandler(filename);
 		}
-		
+
 		public LatteDB (string filename)
 		{
-			store = new FileStream(filename, FileMode.OpenOrCreate);
+			_streamHandler = new FileStreamHandler(filename);
 		}
-		
-		public void Save(object obj)
+
+		public void Save<T> (T obj)
 		{
-			var jsonString = JsonConvert.SerializeObject(obj);
-			AddToFile(jsonString);
+			var jsonString = JsonConvert.SerializeObject (obj);
+			_streamHandler.AppendToStream(typeof(T) + ":" + jsonString);
 		}
-		
-		protected virtual void AddToFile(string jsonString)
+
+		public IList<T> GetAll<T> ()
 		{
-			using(var streamWriter = new StreamWriter(store)){
-				streamWriter.WriteLine(jsonString);
-			}
-		}
-		
-		public IList<T> GetAll<T>()
-		{
-			var all = new List<T>();
+			var all = new List<T> ();
 			
-			using(var streamReader = new StreamReader(store))
+			IList<string> allLines = _streamHandler.ReadAllLines();
+			foreach(string line in allLines)
 			{
-				string line;
-				while((line = streamReader.ReadLine()) != null)
+				var typeName = GetTypeNameFromLine(line);
+				
+				if(typeName == typeof(T).ToString())
 				{
-					T deserializedObject = JsonConvert.DeserializeObject<T>(line);
-					all.Add(deserializedObject);
+					T deserializedObject = JsonConvert.DeserializeObject<T> (GetJsonFromLine(line));
+					all.Add (deserializedObject);
 				}
 			}
-				
+			
 			return all;
 		}
 		
-		public void Dispose ()
+		public string GetTypeNameFromLine (string line)
 		{
-			store.Close();
+			var semicolonAfterTypeNameIndex = line.IndexOf(':');
+			return line.Substring(0, semicolonAfterTypeNameIndex);
+		}
+		
+		public string GetJsonFromLine(string line)
+		{
+			var semicolonAfterTypeNameIndex = line.IndexOf(':');
+			return line.Substring(semicolonAfterTypeNameIndex + 1);
 		}
 	}
 }
