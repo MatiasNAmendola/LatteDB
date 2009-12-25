@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace LatteDB
 {
-	public class LatteDB
+	public class LatteDB : IDisposable
 	{
 		protected Stream store;
 		
@@ -46,6 +46,11 @@ namespace LatteDB
 			}
 				
 			return all;
+		}
+		
+		public void Dispose ()
+		{
+			store.Close();
 		}
 	}
 }

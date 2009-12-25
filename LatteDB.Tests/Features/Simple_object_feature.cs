@@ -9,21 +9,24 @@ namespace LatteDB.Tests
 		[Test()]
 		public void should_save_and_retrieve_same_object_contents ()
 		{
-			var database = new LatteDB("cars.db");
-			
+			string databaseName = "cars.db";
 			Car savedCar = new Car("Volvo");
-			database.Save(savedCar);
 			
-			database = new LatteDB("cars.db");
-			var retrievedCar = database.GetAll<Car>()[0];
+			using(var saveDatabase = new LatteDB(databaseName)){
+				saveDatabase.Save(savedCar);
+			}
 			
-			Assert.AreEqual(savedCar.Brand, retrievedCar.Brand);
+			using(var readDatabase = new LatteDB(databaseName))
+			{
+				var retrievedCar = readDatabase.GetAll<Car>()[0];
+				Assert.AreEqual(savedCar.Brand, retrievedCar.Brand);
+			}
 		}
 	}
 	
 	class Car
 	{
-		public string Brand { get; set; }
+		public string Brand { get; private set; }
 		
 		public Car(string brand)
 		{
