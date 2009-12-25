@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using NUnit.Framework;
 
 namespace LatteDB.Tests
@@ -21,6 +22,8 @@ namespace LatteDB.Tests
 				var retrievedCar = readDatabase.GetAll<Car>()[0];
 				Assert.AreEqual(savedCar.Brand, retrievedCar.Brand);
 			}
+			
+			File.Delete(databaseName);
 		}
 	}
 	
