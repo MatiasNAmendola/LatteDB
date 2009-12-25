@@ -7,44 +7,45 @@ namespace LatteDB.Tests
 	[TestFixture]
 	public class Simple_object_feature
 	{
+		const string DATABASE_FILENAME = "database.db";
+		
+		[TestFixtureTearDown]
+		public void TearDown()
+		{
+			File.Delete(DATABASE_FILENAME);
+		}
+		
 		[Test]
 		public void should_save_and_retrieve_same_object_contents ()
 		{
-			string databaseName = "cars.db";
 			Car savedCar = new Car("Volvo");
 			
-			var saveDatabase = new LatteDB(databaseName);
+			var saveDatabase = new LatteDB(DATABASE_FILENAME);
 			saveDatabase.Save(savedCar);
 			
-			var readDatabase = new LatteDB(databaseName);
+			var readDatabase = new LatteDB(DATABASE_FILENAME);
 			
 			var retrievedCar = readDatabase.GetAll<Car>()[0];
 			Assert.AreEqual(savedCar.Brand, retrievedCar.Brand);
-					
-			File.Delete(databaseName);
 		}
 		
 		[Test]
 		public void should_save_and_retrieve_objects_of_different_types_in_same_database ()
 		{
-			string databaseName = "mixed.db";
 			Car savedCar = new Car("Volvo");
 			Airplane savedPlane = new Airplane("Airbus", "A380");
 			
-			var saveDatabase = new LatteDB(databaseName);
+			var saveDatabase = new LatteDB(DATABASE_FILENAME);
 			saveDatabase.Save(savedCar);
 			saveDatabase.Save(savedPlane);
 			
-			var readDatabase = new LatteDB(databaseName);
-		
+			var readDatabase = new LatteDB(DATABASE_FILENAME);
 			var retrievedCar = readDatabase.GetAll<Car>()[0];
 			Assert.AreEqual(savedCar.Brand, retrievedCar.Brand);
 			
 			var retrievedPlane = readDatabase.GetAll<Airplane>()[0];
 			Assert.AreEqual(savedPlane.Maker, retrievedPlane.Maker);
 			Assert.AreEqual(savedPlane.Model, retrievedPlane.Model);
-		
-			File.Delete(databaseName);
 		}
 	}
 	
