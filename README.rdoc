@@ -4,7 +4,7 @@ LatteDB is a tiny experimental object database, mainly written for C# projects.
 
 == Implementation
 
-The LatteDB library serializes the objects to store using JSON and then stores them along with a key. So it's kind of an object database/key value pair store. Where this is going, no one knows.
+The LatteDB library serializes the objects to store using JSON and then stores them along. So it's kind of an object database. Where this is going, no one knows.
 
 == Copyright
 
