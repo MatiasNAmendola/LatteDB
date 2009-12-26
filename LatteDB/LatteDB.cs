@@ -7,17 +7,16 @@ namespace LatteDB
 {
 	public class LatteDB
 	{
-		protected IStreamHandler _streamHandler;
-
+		protected IStreamReaderWriter _streamHandler;
+		
 		public LatteDB ()
 		{
-			var filename = "database.db";
-			_streamHandler = new FileStreamHandler(filename);
+			_streamHandler = ServiceLocator.GetInstance<IStreamReaderWriter>();
 		}
 
 		public LatteDB (string filename)
 		{
-			_streamHandler = new FileStreamHandler(filename);
+			_streamHandler = ServiceLocator.GetInstance<IStreamReaderWriter>();
 		}
 
 		public void Save<T> (T obj)

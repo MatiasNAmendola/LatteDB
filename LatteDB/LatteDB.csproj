@@ -41,6 +41,7 @@
     <Compile Include="LatteDB.cs" />
     <Compile Include="IStreamHandler.cs" />
     <Compile Include="FileStreamHandler.cs" />
+    <Compile Include="ServiceLocator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

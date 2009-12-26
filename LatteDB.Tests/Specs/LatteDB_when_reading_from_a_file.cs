@@ -4,10 +4,16 @@ using NUnit.Framework;
 
 namespace LatteDB.Tests
 {
-	[TestFixture()]
+	[TestFixture]
 	public class LatteDB_when_reading_from_a_file
 	{
-		[Test()]
+		[TestFixtureSetUp]
+		public void TestFixtureSetUp()
+		{
+			ServiceLocator.RegisterInstance<IStreamReaderWriter>(new StreamHandlerReadStub());
+		}
+		
+		[Test]
 		public void should_extract_type_name_from_line()
 		{
 			var line = typeof(Car) + ":";
@@ -16,7 +22,7 @@ namespace LatteDB.Tests
 			Assert.That(returnedTypeName, Is.EqualTo(typeof(Car).ToString()));
 		}
 		
-		[Test()]
+		[Test]
 		public void should_extract_Json_from_line()
 		{
 			var json = "{\"Brand\":\"Volvo\"}";
@@ -26,10 +32,10 @@ namespace LatteDB.Tests
 			Assert.That(returnedJson, Is.EqualTo(json));
 		}
 		
-		[Test()]
+		[Test]
 		public void should_be_able_to_find_specific_types ()
 		{
-			var streamHandlerStub = new MockStreamHandler();
+			var streamHandlerStub = new StreamHandlerReadStub();
 			var database = new StubLatteDB(streamHandlerStub);
 			
 			var retrievedCar = database.GetAll<Car>()[0];
@@ -38,7 +44,7 @@ namespace LatteDB.Tests
 		}
 	}
 	
-	class MockStreamHandler : IStreamHandler
+	class StreamHandlerReadStub : IStreamReaderWriter
 	{
 		public void AppendToStream (string stringToAppend)
 		{

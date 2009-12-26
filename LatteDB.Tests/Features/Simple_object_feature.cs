@@ -9,6 +9,12 @@ namespace LatteDB.Tests
 	{
 		const string DATABASE_FILENAME = "database.db";
 		
+		[TestFixtureSetUp]
+		public void SetUp()
+		{
+			ServiceLocator.RegisterInstance<IStreamReaderWriter>(new FileStreamReaderWriter(DATABASE_FILENAME));
+		}
+		
 		[TestFixtureTearDown]
 		public void TearDown()
 		{

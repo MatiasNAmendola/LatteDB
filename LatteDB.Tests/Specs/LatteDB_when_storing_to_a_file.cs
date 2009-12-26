@@ -10,7 +10,7 @@ namespace LatteDB.Tests
 		[Test]
 		public void should_append_typename_and_Json_to_file()
 		{
-			var streamHandlerStub = new StreamHandlerStub();
+			var streamHandlerStub = new StreamHandlerAppendStub();
 			var database = new StubLatteDB(streamHandlerStub);
 			var savedCar = new Car("Volvo");
 			
@@ -22,7 +22,7 @@ namespace LatteDB.Tests
 		[Test]
 		public void should_append_two_objects_to_file()
 		{
-			var streamHandlerStub = new StreamHandlerStub();
+			var streamHandlerStub = new StreamHandlerAppendStub();
 			var database = new StubLatteDB(streamHandlerStub);
 			var car1 = new Car("Volvo");
 			var car2 = new Car("SAAB");
@@ -34,7 +34,7 @@ namespace LatteDB.Tests
 		}
 	}
 	
-	class StreamHandlerStub : IStreamHandler
+	class StreamHandlerAppendStub : IStreamReaderWriter
 	{
 		public string AppendedString { get; set; }
 		
@@ -52,7 +52,7 @@ namespace LatteDB.Tests
 	class StubLatteDB : LatteDB
 	{
 		
-		public StubLatteDB(IStreamHandler streamHandler)
+		public StubLatteDB(IStreamReaderWriter streamHandler)
 		{
 			_streamHandler = streamHandler;
 		}

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace LatteDB
 {
-	public class FileStreamHandler : IStreamHandler
+	public class FileStreamReaderWriter : IStreamReaderWriter
 	{
 		protected readonly string _filename;
 		
-		public FileStreamHandler (string filename)
+		public FileStreamReaderWriter (string filename)
 		{
 			_filename = filename;
 		}
