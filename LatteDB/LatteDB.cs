@@ -8,11 +8,6 @@ namespace LatteDB
 	public class LatteDB
 	{
 		protected IStreamReaderWriter _streamHandler;
-		
-		public LatteDB ()
-		{
-			_streamHandler = ServiceLocator.GetInstance<IStreamReaderWriter>();
-		}
 
 		public LatteDB (string filename)
 		{

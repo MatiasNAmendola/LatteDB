@@ -7,18 +7,25 @@ namespace LatteDB.Tests
 	[TestFixture]
 	public class LatteDB_when_reading_from_a_file
 	{
+		LatteDB _database;
+		
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
 			ServiceLocator.RegisterInstance<IStreamReaderWriter>(new StreamHandlerReadStub());
 		}
 		
+		[SetUp]
+		public void SetUp()
+		{
+			_database = new LatteDB("database.db");
+		}
+		
 		[Test]
 		public void should_extract_type_name_from_line()
 		{
 			var line = typeof(Car) + ":";
-			var database = new LatteDB();
-			var returnedTypeName = database.GetTypeNameFromLine(line);
+			var returnedTypeName = _database.GetTypeNameFromLine(line);
 			Assert.That(returnedTypeName, Is.EqualTo(typeof(Car).ToString()));
 		}
 		
@@ -27,18 +34,14 @@ namespace LatteDB.Tests
 		{
 			var json = "{\"Brand\":\"Volvo\"}";
 			var line = typeof(Car) + ":" + json;
-			var database = new LatteDB();
-			var returnedJson = database.GetJsonFromLine(line);
+			var returnedJson = _database.GetJsonFromLine(line);
 			Assert.That(returnedJson, Is.EqualTo(json));
 		}
 		
 		[Test]
 		public void should_be_able_to_find_specific_types ()
 		{
-			var streamHandlerStub = new StreamHandlerReadStub();
-			var database = new StubLatteDB(streamHandlerStub);
-			
-			var retrievedCar = database.GetAll<Car>()[0];
+			var retrievedCar = _database.GetAll<Car>()[0];
 			
 			Assert.That(retrievedCar.Brand, Is.EqualTo("Volvo"));
 		}
